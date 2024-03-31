@@ -35,7 +35,7 @@ export interface EditaPessoaUsuaria {
     nascimento: string;
     cpf: string;
     telefone: string;
-    email: string;
+    email: UnidadeFederativa;
     cidade: string;
     estado: UnidadeFederativa;
     genero: string;

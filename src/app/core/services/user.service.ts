@@ -9,7 +9,7 @@ import { PessoaUsuaria, jwtClient } from '../types/type';
 })
 export class UserService {
 
-  private userSubject = new BehaviorSubject<PessoaUsuaria | null>(null);
+  private userSubject = new BehaviorSubject<jwtClient | null>(null);
 
   constructor(private tokenService: TokenService) {
     if(this.tokenService.possuiToken()) {
@@ -20,6 +20,7 @@ export class UserService {
   private decodificarJWT() {
     const token = this.tokenService.retornarToken();
     const user = jwt_decode(token) as jwtClient;
+    this.userSubject.next(user);
     console.log(user);  
   }
 
@@ -34,6 +35,10 @@ export class UserService {
 
   logout() {
     this.tokenService.excluirToken();
+    this.userSubject.next(null);
+  }
+
+  setUserNull() {
     this.userSubject.next(null);
   }
 

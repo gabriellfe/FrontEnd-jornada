@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AutenticacaoService } from 'src/app/core/services/autenticacao.service';
 import { DataService } from 'src/app/core/services/data.service';
@@ -11,13 +12,16 @@ import { DataService } from 'src/app/core/services/data.service';
 })
 export class RedefinirSenhaComponent implements OnInit{
   onErrorCodigo!: boolean;
-  redefinirForm!: FormGroup
+  redefinirForm!: FormGroup;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'right';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
 
   constructor(
     private formBuilder: FormBuilder,
     private authService: AutenticacaoService,
     private router: Router,
-    private dataService: DataService
+    private dataService: DataService,
+    private snack: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -35,8 +39,15 @@ export class RedefinirSenhaComponent implements OnInit{
     const password = this.redefinirForm.value.password;
     this.authService.redefineSenha(email, ticket, password).subscribe({
       next: (value) => {
+        this.snack.open('Senha Redefinida com Sucesso!', 'Ok', 
+        {
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition,
+          duration: 5000
+        });
         this.router.navigate(['login']);
         this.redefinirForm.reset();
+        this.dataService.setEmail('');
       },
       error: (err) => {
         console.log('Problema na autenticação', err)

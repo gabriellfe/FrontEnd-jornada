@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CadastroService } from 'src/app/core/services/CadastroService';
@@ -6,7 +6,7 @@ import { FormularioService } from 'src/app/core/services/formulario.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { PessoaUsuaria } from 'src/app/core/types/type';
-import { DatePipe } from '@angular/common';
+import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-perfil',
@@ -14,6 +14,8 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./perfil.component.scss']
 })
 export class PerfilComponent implements OnInit{
+  horizontalPosition: MatSnackBarHorizontalPosition = 'right';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   titulo = 'Olá, ';
   textoBotao = 'ATUALIZAR';
   perfilComponent = true;
@@ -29,7 +31,7 @@ export class PerfilComponent implements OnInit{
     private formularioService: FormularioService,
     private userService: UserService,
     private router: Router,
-    private datePipe: DatePipe
+    private snack: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -54,7 +56,6 @@ export class PerfilComponent implements OnInit{
       telefone: this.cadastro.telefone,
       estado: this.cadastro.estado,
     });
-    console.log(this.form?.value.nascimento);
   }
 
   atualizar() {
@@ -71,7 +72,12 @@ export class PerfilComponent implements OnInit{
 
     this.cadastroService.editarCadastro(dadosAtualizados, this.token).subscribe({
       next: () => {
-        alert('Cadastro editado com sucesso')
+        this.snack.open('Perfil Atualizado com Sucesso!', 'Ok',{
+          panelClass: ['snackbar-1'],
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition,
+          duration: 5000
+        });
         this.router.navigate(['/']);
       },
       error: (err) => {

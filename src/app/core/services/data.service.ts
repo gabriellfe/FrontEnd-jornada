@@ -11,6 +11,7 @@ export class DataService {
   setEmail(email: string){
     this.email = email;
   }
+  
   getEmail(){
     return this.email;
   }

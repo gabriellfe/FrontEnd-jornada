@@ -28,7 +28,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 import { BotaoControleComponent } from './shared/botao-controle/botao-controle.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { PromocoesComponent } from './pages/home/promocoes/promocoes.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DropdownUfComponent } from './shared/dropdown-uf/dropdown-uf.component';
@@ -46,8 +46,11 @@ import { RedefinirSenhaComponent } from './pages/redefinir-senha/redefinir-senha
 import { SolicitaCodigoComponent } from './pages/solicita-codigo/solicita-codigo.component';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { DatePipe, registerLocaleData } from '@angular/common';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { LOCALE_ID } from '@angular/core';
 import localeBr from '@angular/common/locales/pt';
+import { AuthInterceptor } from './core/interceptor/auth.interceptor';
+import { ErrorInterceptor } from './core/interceptor/error.interceptor';
 registerLocaleData(localeBr, 'pt')
 
 @NgModule({
@@ -97,9 +100,15 @@ registerLocaleData(localeBr, 'pt')
     MatRadioModule,
     MatDividerModule,
     MatCheckboxModule,
-    NgxMaskDirective
+    NgxMaskDirective,
+    MatSnackBarModule
   ],
-  providers: [provideNgxMask({ /* opções de cfg */ }), DatePipe, { provide: LOCALE_ID, useValue: 'pt' }],
-  bootstrap: [AppComponent]
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+    provideNgxMask({ /* opções de cfg */ }), 
+    DatePipe, 
+    { provide: LOCALE_ID, useValue: 'pt' }],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

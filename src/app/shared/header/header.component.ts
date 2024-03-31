@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AutenticacaoService } from 'src/app/core/services/autenticacao.service';
 import { TokenService } from 'src/app/core/services/token.service';
+import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-header',
@@ -14,20 +15,23 @@ export class HeaderComponent implements OnInit{
   constructor(
     private tokenService: TokenService,
     private route: Router,
-    private auth: AutenticacaoService
+    private auth: AutenticacaoService,
+    private userService: UserService
   ) {
     auth.getLoggedInName.subscribe(() => {
       this.authenticated = true;
     })
   }
+  user$ = this.userService.retornarUser();
+
   ngOnInit(): void {
     this.authenticated = this.tokenService.possuiToken();
   }
 
   logout(){
     this.authenticated = false;
-    const token = this.tokenService.retornarToken();
-    this.auth.deslogar(token).subscribe({
+    this.userService.setUserNull();
+    this.auth.deslogar().subscribe({
       next: (value) => {
         this.route.navigate(['/login']);
         this.tokenService.excluirToken();
@@ -36,5 +40,8 @@ export class HeaderComponent implements OnInit{
         console.log('Erro ao realizar cadastro', err)
       }
     });
+  }
+  setAutenthicated(authenticated: boolean){
+    this.authenticated = authenticated;
   }
 }

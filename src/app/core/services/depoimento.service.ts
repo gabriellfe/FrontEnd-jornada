@@ -17,6 +17,6 @@ export class DepoimentoService {
   }
 
   listar() : Observable<Depoimento[]>{
-    return this.http.get<Depoimento[]>(`${this.apiUrl}/depoimentos`);
+    return this.http.get<Depoimento[]>(`/api/api-product/depoimento`);
   }
 }

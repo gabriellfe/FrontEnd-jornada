@@ -18,20 +18,11 @@ export class CadastroService {
   }
 
   buscarCadastro(token: string): Observable<PessoaUsuaria> {
-    const headers = new HttpHeaders({
-      'token': `Bearer ${token}`
-    });
-
-    return this.http.get<PessoaUsuaria>(`/api/user/perfil`, { headers });
+    return this.http.get<PessoaUsuaria>(`/api/user/perfil`);
   }
 
-
   editarCadastro(pessoaUsuaria: EditaPessoaUsuaria, token: string): Observable<EditaPessoaUsuaria> {
-    const headers = new HttpHeaders({
-      'token': `Bearer ${token}`
-    });
-
-    return this.http.put<PessoaUsuaria>(`/api/user/perfil`, pessoaUsuaria, { headers });
+    return this.http.put<EditaPessoaUsuaria>(`/api/user/perfil`, pessoaUsuaria);
   }
 
 }

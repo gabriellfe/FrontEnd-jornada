@@ -1,12 +1,16 @@
 <header class="app-header">
   <mat-toolbar>
     <span class="spacer"></span>
-    <button *ngIf="authenticated" routerLink="/sobre"mat-button>Sobre</button>
-    <button *ngIf="authenticated" routerLink="/home"mat-button>Home</button>
-    <button *ngIf="!authenticated" routerLink="/cadastro" mat-raised-button color="primary">CADASTRE-SE</button>
-    <button *ngIf="!authenticated" routerLink="/login" mat-stroked-button>LOGIN</button>
-    <button *ngIf="authenticated" routerLink="/perfil" mat-stroked-button>PERFIL</button>
-    <button *ngIf="authenticated" (click)="logout()" mat-stroked-button>LOGOUT</button>
+    <ng-container *ngIf="user$ | async as pessoaUsuaria; else login">
+      <button *ngIf="authenticated" routerLink="/sobre"mat-button>Sobre</button>
+      <button *ngIf="authenticated" routerLink="/home"mat-button>Home</button>
+      <button *ngIf="authenticated" routerLink="/perfil" mat-stroked-button>PERFIL</button>
+      <button *ngIf="authenticated" (click)="logout()" mat-stroked-button>LOGOUT</button>
+    </ng-container>
+    <ng-template #login>
+      <button routerLink="/cadastro" mat-raised-button color="primary">CADASTRE-SE</button>
+      <button routerLink="/login" mat-stroked-button>LOGIN</button>
+    </ng-template>
   </mat-toolbar>
 </header>
 

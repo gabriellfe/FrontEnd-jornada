@@ -42,7 +42,6 @@ export class AutenticacaoService {
 
 
   solicitaCodigo(email: string): Observable<HttpResponse<responseLogin>> {
-    console.log(email);
     return this.http.post<responseLogin>(
       `/api/user/ticket`,
       { email },
@@ -67,12 +66,8 @@ export class AutenticacaoService {
     );
   }
 
-  deslogar(token: string){
-    console.log(token);
-    const headers = new HttpHeaders({
-      'token': `${token}`
-    });
-    return this.http.post<responseLogin>(`/api/user/logout`, null , { headers });
+  deslogar(){
+    return this.http.post<responseLogin>(`/api/user/logout`, null );
   }
 
 }
